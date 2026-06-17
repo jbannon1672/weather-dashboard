@@ -8,10 +8,10 @@
     body { margin:0; background:#101820; color:white; font-family:Arial,sans-serif; }
     .grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; padding:22px; }
     .card { background:#1f2d3a; border-radius:18px; padding:22px; box-shadow:0 4px 16px #0006; }
-    .wide { grid-column:span 2; }
+    .wide { grid-column:span 1; }
     .full { grid-column:span 3; }
     h1,h2 { margin:0 0 12px; }
-    .clock { font-size:72px; font-weight:bold; }
+    .clock { font-size:96px; font-weight:bold; }
     .big { font-size:52px; font-weight:bold; }
     .text { font-size:24px; line-height:1.45; }
     .small { font-size:20px; line-height:1.45; }
@@ -35,7 +35,7 @@
       <div id="wind" class="text">Loading...</div>
     </div>
 
-    <div class="card wide">
+    <div class="card">
       <h2>5-Day Forecast</h2>
       <div id="forecast" class="small">Loading...</div>
     </div>
@@ -76,9 +76,11 @@ async function loadWeather() {
   const r = await fetch(url);
   const d = await r.json();
 
-  document.getElementById("weather").innerHTML =
-    `<div class="big">${Math.round(d.current.temperature_2m)}°F</div>` +
-    `Humidity: ${d.current.relative_humidity_2m}%`;
+document.getElementById("weather").innerHTML =
+  `<div class="big">${Math.round(d.current.temperature_2m)}°F</div>` +
+  `Humidity: ${d.current.relative_humidity_2m}%<br>` +
+  `Today's High: ${Math.round(d.daily.temperature_2m_max[0])}°<br>` +
+  `Today's Low: ${Math.round(d.daily.temperature_2m_min[0])}°`;
 
   document.getElementById("wind").innerHTML =
     `Wind: ${Math.round(d.current.wind_speed_10m)} mph ${dir(d.current.wind_direction_10m)}<br>` +
