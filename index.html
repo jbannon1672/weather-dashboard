@@ -667,6 +667,7 @@ ctx.clearRect(0,0,w,h);
   let min = Math.min(-4, ...vals), max = Math.max(5, ...vals);
   const start = new Date(points[0].t.replace(" ","T")).getTime();
   const finish = new Date(points[points.length-1].t.replace(" ","T")).getTime();
+  const nowTime = Date.now();
   const x = t => padL + ((new Date(t.replace(" ","T")).getTime()-start)/(finish-start))*(w-padL-padR);
   const y = v => padT + (max-v)/(max-min)*(h-padT-padB);
   const vals=points.map(p=>+p.v);
@@ -739,7 +740,31 @@ ctx.stroke();
     ctx.fillStyle="#dcecff";
     ctx.fillText(lab,xx-13,h-8);
 });
+if (nowTime >= start && nowTime <= finish) {
 
+  const nowX =
+    L + ((nowTime - start) / (finish - start)) * (w - L - R);
+
+  // vertical line
+  ctx.strokeStyle = "rgba(255,255,255,0.85)";
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+  ctx.moveTo(nowX, T);
+  ctx.lineTo(nowX, h - B);
+  ctx.stroke();
+
+  // NOW label
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 14px Arial";
+
+  const labelWidth = 42;
+  const labelHeight = 20;
+
+  ctx.fillRect(nowX - labelWidth/2, T + 4, labelWidth, labelHeight);
+
+  ctx.fillStyle = "#000";
+  ctx.fillText("NOW", nowX - 15, T + 18);
   labels.forEach(t=>{
     const xx=x(t.t), yy=y(parseFloat(t.v));
     const high=t.type==="H";
