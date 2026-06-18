@@ -1,126 +1,577 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Brigantine Weather & Tides</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { margin:0; background:#101820; color:white; font-family:Arial,sans-serif; }
-    .grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; padding:22px; }
-    .card { background:#1f2d3a; border-radius:18px; padding:22px; box-shadow:0 4px 16px #0006; }
-    .wide { grid-column:span 1; }
-    .full { grid-column:span 3; }
-    h1,h2 { margin:0 0 12px; }
-    .clock { font-size:96px; font-weight:bold; }
-    .big { font-size:52px; font-weight:bold; }
-    .text { font-size:24px; line-height:1.45; }
-    .small { font-size:20px; line-height:1.45; }
-  </style>
+<meta charset="utf-8">
+<title>Sea Isle City Weather & Tides</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#06111d;
+  --panel:#0b2235;
+  --panel2:#102b42;
+  --line:#244b68;
+  --blue:#3aa8ff;
+  --orange:#ff9f2e;
+  --green:#45d06d;
+  --text:#f4f8ff;
+  --muted:#aac0d4;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at top left,#123b5a 0,#06111d 42%,#03080e 100%);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  overflow:hidden;
+}
+.dashboard{
+  width:100vw;
+  height:100vh;
+  padding:18px;
+  display:grid;
+  grid-template-rows:105px 1fr 1fr 62px;
+  gap:12px;
+}
+.header{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1.2fr;
+  gap:12px;
+  align-items:center;
+}
+.title h1{
+  margin:0;
+  font-size:44px;
+  letter-spacing:-1px;
+}
+.title div,.date{
+  color:var(--muted);
+  font-size:20px;
+}
+.clock{
+  text-align:center;
+  font-size:64px;
+  font-weight:800;
+  line-height:1;
+}
+.hero{
+  height:100%;
+  border-radius:12px;
+  background:linear-gradient(135deg,#f7b75f,#315d80 55%,#142b3d);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.35),rgba(255,255,255,.08));
+}
+.row{
+  display:grid;
+  gap:12px;
+}
+.top{
+  grid-template-columns:1.05fr 1.05fr .95fr;
+}
+.bottom{
+  grid-template-columns:1.55fr .95fr;
+}
+.card{
+  background:linear-gradient(145deg,rgba(20,55,82,.92),rgba(5,18,31,.94));
+  border:1px solid rgba(80,150,200,.35);
+  border-radius:13px;
+  box-shadow:0 8px 28px rgba(0,0,0,.35) inset, 0 4px 12px rgba(0,0,0,.25);
+  padding:18px;
+  overflow:hidden;
+}
+.card h2{
+  margin:0 0 14px;
+  color:var(--blue);
+  font-size:22px;
+  text-transform:uppercase;
+}
+.current{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.weather-icon{
+  font-size:86px;
+  line-height:1;
+  margin:8px 0;
+}
+.temp{
+  font-size:76px;
+  font-weight:900;
+  line-height:1;
+}
+.condition{
+  font-size:22px;
+  margin-top:8px;
+}
+.stats{
+  font-size:19px;
+  line-height:1.6;
+}
+.stats b{
+  float:right;
+  color:white;
+}
+.highlow{
+  display:flex;
+  justify-content:space-around;
+  border-top:1px solid var(--line);
+  margin-top:13px;
+  padding-top:12px;
+  font-size:18px;
+}
+.highlow span:first-child{color:var(--orange)}
+.highlow span:last-child{color:var(--blue)}
+.forecast{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  height:calc(100% - 38px);
+}
+.day{
+  text-align:center;
+  border-left:1px solid var(--line);
+  padding:4px 6px;
+}
+.day:first-child{border-left:0}
+.day .name{
+  font-size:20px;
+  font-weight:800;
+}
+.day .ico{
+  font-size:44px;
+  margin:8px 0;
+}
+.day .hi{
+  color:var(--orange);
+  font-size:31px;
+  font-weight:800;
+}
+.day .lo{
+  color:var(--blue);
+  font-size:27px;
+  font-weight:700;
+}
+.day .rain{
+  margin-top:6px;
+  color:#cfeaff;
+  font-size:18px;
+}
+.sunwind{
+  display:grid;
+  grid-template-columns:1fr 135px;
+  gap:10px;
+  align-items:center;
+}
+.bigline{
+  font-size:24px;
+  line-height:1.55;
+}
+.compass{
+  width:130px;
+  height:130px;
+  border:1px solid #7e9bb3;
+  border-radius:50%;
+  position:relative;
+  margin:auto;
+}
+.arrow{
+  position:absolute;
+  left:57px;
+  top:18px;
+  width:16px;
+  height:82px;
+  background:linear-gradient(#dfeeff,#238eff);
+  clip-path:polygon(50% 0,100% 72%,62% 72%,62% 100%,38% 100%,38% 72%,0 72%);
+  transform-origin:50% 82%;
+}
+.compass span{
+  position:absolute;
+  font-weight:bold;
+  color:#dcecff;
+}
+.n{top:-24px;left:58px}.s{bottom:-24px;left:58px}.e{right:-22px;top:55px}.w{left:-24px;top:55px}
+.tide-head{
+  display:flex;
+  justify-content:space-between;
+  font-size:19px;
+  margin-bottom:6px;
+}
+.tide-head span:first-child{color:var(--green)}
+.tide-head span:last-child{color:var(--blue)}
+#tideChart{
+  width:100%;
+  height:205px;
+}
+.tide-list{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+.tide-item{
+  display:grid;
+  grid-template-columns:46px 1fr 1fr 70px;
+  align-items:center;
+  border-top:1px solid var(--line);
+  padding:17px 0;
+  font-size:24px;
+}
+.tide-item:first-child{border-top:0}
+.icon-circle{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+}
+.high{color:var(--green)}
+.low{color:var(--blue)}
+.footer{
+  display:grid;
+  grid-template-columns:1.2fr 1fr 1fr;
+  gap:12px;
+  align-items:center;
+  background:linear-gradient(145deg,rgba(20,55,82,.92),rgba(5,18,31,.94));
+  border:1px solid rgba(80,150,200,.35);
+  border-radius:13px;
+  padding:10px 18px;
+  color:#d8e9f8;
+  font-size:17px;
+}
+.lighthouse{font-size:34px;margin-right:10px}
+.flex{display:flex;align-items:center}
+</style>
 </head>
+
 <body>
-  <div class="grid">
-    <div class="card">
-      <h1>Sea Isle City</h1>
+<div class="dashboard">
+  <div class="header">
+    <div class="title">
+      <h1>Sea Isle City, NJ</h1>
+      <div>NOAA Station: Townsend Inlet, NJ</div>
+    </div>
+    <div>
       <div id="clock" class="clock">--:--</div>
-      <div id="date" class="text"></div>
+      <div id="date" class="date" style="text-align:center">Loading...</div>
     </div>
+    <div class="hero"></div>
+  </div>
 
+  <div class="row top">
     <div class="card">
-      <h2>Current Weather</h2>
-      <div id="weather" class="text">Loading...</div>
-    </div>
-
-    <div class="card">
-      <h2>Sun / Wind</h2>
-      <div id="wind" class="text">Loading...</div>
+      <h2>Current Conditions</h2>
+      <div class="current">
+        <div>
+          <div class="weather-icon" id="mainIcon">🌤️</div>
+          <div id="condition" class="condition">Loading...</div>
+        </div>
+        <div>
+          <div id="temp" class="temp">--°</div>
+          <div class="stats">
+            Feels Like <b id="feels">--°</b><br>
+            Humidity <b id="humidity">--%</b><br>
+            Pressure <b id="pressure">--</b><br>
+            Wind <b id="windSmall">--</b>
+          </div>
+        </div>
+      </div>
+      <div class="highlow">
+        <span>Today's High <b id="todayHigh">--°</b></span>
+        <span>Today's Low <b id="todayLow">--°</b></span>
+      </div>
     </div>
 
     <div class="card">
       <h2>5-Day Forecast</h2>
-      <div id="forecast" class="small">Loading...</div>
+      <div id="forecast" class="forecast"></div>
+    </div>
+
+    <div class="card">
+      <h2>Sun & Wind</h2>
+      <div class="sunwind">
+        <div class="bigline">
+          🌬️ Wind<br><b id="windBig">--</b><br>
+          ☀️ Sunrise<br><b id="sunrise">--</b><br>
+          🌅 Sunset<br><b id="sunset">--</b>
+        </div>
+        <div class="compass">
+          <span class="n">N</span><span class="e">E</span><span class="s">S</span><span class="w">W</span>
+          <div id="windArrow" class="arrow"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row bottom">
+    <div class="card">
+      <h2>Tide Forecast · Townsend Inlet, NJ</h2>
+      <div class="tide-head">
+        <span id="nextHigh">Next High Tide: --</span>
+        <span id="nextLow">Next Low Tide: --</span>
+      </div>
+      <canvas id="tideChart"></canvas>
     </div>
 
     <div class="card">
       <h2>Next Tides</h2>
-      <div id="tides" class="small">Loading...</div>
-    </div>
-
-    <div class="card full">
-      <h2>NOAA Station: Townsend Inlet, NJ</h2>
-      <div class="small">Weather and tides update automatically over Wi-Fi.</div>
+      <div id="tideList" class="tide-list">Loading...</div>
     </div>
   </div>
+
+  <div class="footer">
+    <div class="flex"><span class="lighthouse">⚓</span><div><b>NOAA Station: Townsend Inlet, NJ</b><br>Weather and tides update automatically over Wi-Fi</div></div>
+    <div>⟳ Last updated: <span id="updated">--</span></div>
+    <div>📶 Updates every 15 minutes</div>
+  </div>
+</div>
 
 <script>
 const LAT = 39.153;
 const LON = -74.692;
 const STATION = "8535375";
 
-function updateClock() {
+function updateClock(){
   const now = new Date();
   document.getElementById("clock").textContent =
     now.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
   document.getElementById("date").textContent =
-    now.toLocaleDateString([], {weekday:"long", month:"long", day:"numeric"});
+    now.toLocaleDateString([], {weekday:"long", month:"long", day:"numeric", year:"numeric"});
 }
-setInterval(updateClock, 1000);
+setInterval(updateClock,1000);
 updateClock();
 
-function dir(deg) {
-  const dirs = ["N","NE","E","SE","S","SW","W","NW"];
-  return dirs[Math.round(deg / 45) % 8];
+function windDir(deg){
+  const dirs=["N","NE","E","SE","S","SW","W","NW"];
+  return dirs[Math.round(deg/45)%8];
+}
+function weatherIcon(code){
+  if(code===0) return "☀️";
+  if(code<=2) return "🌤️";
+  if(code===3) return "☁️";
+  if([45,48].includes(code)) return "🌫️";
+  if([51,53,55,61,63,65,80,81,82].includes(code)) return "🌧️";
+  if([71,73,75,77,85,86].includes(code)) return "❄️";
+  if([95,96,99].includes(code)) return "⛈️";
+  return "🌤️";
+}
+function weatherText(code){
+  if(code===0) return "Clear";
+  if(code<=2) return "Partly Cloudy";
+  if(code===3) return "Cloudy";
+  if([45,48].includes(code)) return "Fog";
+  if([51,53,55].includes(code)) return "Drizzle";
+  if([61,63,65,80,81,82].includes(code)) return "Rain";
+  if([95,96,99].includes(code)) return "Thunderstorms";
+  return "Mostly Cloudy";
 }
 
-async function loadWeather() {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America/New_York`;
+async function loadWeather(){
+  const url =
+    `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}`+
+    `&current=temperature_2m,relative_humidity_2m,apparent_temperature,pressure_msl,weather_code,wind_speed_10m,wind_direction_10m`+
+    `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset`+
+    `&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America/New_York`;
+
   const r = await fetch(url);
   const d = await r.json();
+  const c = d.current;
+  const daily = d.daily;
+  const wd = windDir(c.wind_direction_10m);
 
-document.getElementById("weather").innerHTML =
-  `<div class="big">${Math.round(d.current.temperature_2m)}°F</div>` +
-  `Humidity: ${d.current.relative_humidity_2m}%<br>` +
-  `Today's High: ${Math.round(d.daily.temperature_2m_max[0])}°<br>` +
-  `Today's Low: ${Math.round(d.daily.temperature_2m_min[0])}°`;
-
-  document.getElementById("wind").innerHTML =
-    `Wind: ${Math.round(d.current.wind_speed_10m)} mph ${dir(d.current.wind_direction_10m)}<br>` +
-    `Sunrise: ${new Date(d.daily.sunrise[0]).toLocaleTimeString([], {hour:"numeric", minute:"2-digit"})}<br>` +
-    `Sunset: ${new Date(d.daily.sunset[0]).toLocaleTimeString([], {hour:"numeric", minute:"2-digit"})}`;
+  document.getElementById("mainIcon").textContent = weatherIcon(c.weather_code);
+  document.getElementById("condition").textContent = weatherText(c.weather_code);
+  document.getElementById("temp").textContent = `${Math.round(c.temperature_2m)}°F`;
+  document.getElementById("feels").textContent = `${Math.round(c.apparent_temperature)}°F`;
+  document.getElementById("humidity").textContent = `${c.relative_humidity_2m}%`;
+  document.getElementById("pressure").textContent = `${c.pressure_msl.toFixed(2)} mb`;
+  document.getElementById("windSmall").textContent = `${Math.round(c.wind_speed_10m)} mph ${wd}`;
+  document.getElementById("windBig").textContent = `${Math.round(c.wind_speed_10m)} mph ${wd}`;
+  document.getElementById("todayHigh").textContent = `${Math.round(daily.temperature_2m_max[0])}°`;
+  document.getElementById("todayLow").textContent = `${Math.round(daily.temperature_2m_min[0])}°`;
+  document.getElementById("sunrise").textContent = new Date(daily.sunrise[0]).toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+  document.getElementById("sunset").textContent = new Date(daily.sunset[0]).toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+  document.getElementById("windArrow").style.transform = `rotate(${c.wind_direction_10m + 180}deg)`;
 
   let out = "";
-  for (let i = 0; i < 5; i++) {
-    const day = new Date(d.daily.time[i]).toLocaleDateString([], {weekday:"short"});
-    out += `${day}: ${Math.round(d.daily.temperature_2m_max[i])}° / ${Math.round(d.daily.temperature_2m_min[i])}° — Rain ${d.daily.precipitation_probability_max[i] ?? 0}%<br>`;
+  for(let i=0;i<5;i++){
+    const day = new Date(daily.time[i]).toLocaleDateString([], {weekday:"short"}).toUpperCase();
+    out += `
+      <div class="day">
+        <div class="name">${day}</div>
+        <div class="ico">${weatherIcon(daily.weather_code[i])}</div>
+        <div class="hi">${Math.round(daily.temperature_2m_max[i])}°</div>
+        <div class="lo">${Math.round(daily.temperature_2m_min[i])}°</div>
+        <div class="rain">💧 ${daily.precipitation_probability_max[i] ?? 0}%</div>
+      </div>`;
   }
   document.getElementById("forecast").innerHTML = out;
 }
 
-async function loadTides() {
-  const today = new Date();
-  const end = new Date();
-  end.setDate(today.getDate() + 2);
-  const fmt = d => d.toISOString().slice(0,10).replaceAll("-","");
-
-  const url = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=dashboard&begin_date=${fmt(today)}&end_date=${fmt(end)}&datum=MLLW&station=${STATION}&time_zone=lst_ldt&units=english&interval=hilo&format=json`;
-
-  const r = await fetch(url);
-  const d = await r.json();
-
-  let out = "";
-  d.predictions.slice(0, 6).forEach(t => {
-    const time = new Date(t.t.replace(" ", "T")).toLocaleString([], {
-      weekday:"short", hour:"numeric", minute:"2-digit"
-    });
-    const type = t.type === "H" ? "High" : "Low";
-    out += `${time}: <b>${type}</b> — ${parseFloat(t.v).toFixed(1)} ft<br>`;
-  });
-  document.getElementById("tides").innerHTML = out;
+function fmtDate(d){
+  return d.toISOString().slice(0,10).replaceAll("-","");
+}
+function timeLabel(str){
+  return new Date(str.replace(" ","T")).toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+}
+function dayTimeLabel(str){
+  return new Date(str.replace(" ","T")).toLocaleString([], {weekday:"short", hour:"numeric", minute:"2-digit"});
 }
 
-loadWeather();
-loadTides();
-setInterval(loadWeather, 30 * 60 * 1000);
-setInterval(loadTides, 60 * 60 * 1000);
+async function loadTides(){
+  const today = new Date();
+  const end = new Date();
+  end.setDate(today.getDate()+1);
+
+  const hiloUrl =
+    `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=dashboard`+
+    `&begin_date=${fmtDate(today)}&end_date=${fmtDate(end)}&datum=MLLW&station=${STATION}`+
+    `&time_zone=lst_ldt&units=english&interval=hilo&format=json`;
+
+  const hourlyUrl =
+    `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=dashboard`+
+    `&begin_date=${fmtDate(today)}&end_date=${fmtDate(end)}&datum=MLLW&station=${STATION}`+
+    `&time_zone=lst_ldt&units=english&format=json`;
+
+  const [hiloR, hourlyR] = await Promise.all([fetch(hiloUrl), fetch(hourlyUrl)]);
+  const hilo = (await hiloR.json()).predictions || [];
+  const hourly = (await hourlyR.json()).predictions || [];
+
+  const next4 = hilo.slice(0,4);
+  document.getElementById("tideList").innerHTML = next4.map(t=>{
+    const isHigh = t.type==="H";
+    return `
+      <div class="tide-item">
+        <div class="icon-circle ${isHigh?'high':'low'}">${isHigh?'↑':'↓'}</div>
+        <div>${dayTimeLabel(t.t)}</div>
+        <div class="${isHigh?'high':'low'}">${isHigh?'HIGH TIDE':'LOW TIDE'}</div>
+        <b>${parseFloat(t.v).toFixed(1)} ft</b>
+      </div>`;
+  }).join("");
+
+  const nextHigh = hilo.find(t=>t.type==="H");
+  const nextLow = hilo.find(t=>t.type==="L");
+  document.getElementById("nextHigh").textContent = nextHigh ? `Next High Tide: ${timeLabel(nextHigh.t)} (${parseFloat(nextHigh.v).toFixed(1)} ft)` : "Next High Tide: --";
+  document.getElementById("nextLow").textContent = nextLow ? `Next Low Tide: ${timeLabel(nextLow.t)} (${parseFloat(nextLow.v).toFixed(1)} ft)` : "Next Low Tide: --";
+
+  drawTideChart(hourly, next4);
+}
+
+function drawTideChart(points, labels){
+  const canvas = document.getElementById("tideChart");
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * devicePixelRatio;
+  canvas.height = rect.height * devicePixelRatio;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+
+  const w = rect.width, h = rect.height;
+  const padL = 48, padR = 14, padT = 16, padB = 32;
+  ctx.clearRect(0,0,w,h);
+
+  const vals = points.map(p=>parseFloat(p.v));
+  let min = Math.min(-4, ...vals), max = Math.max(5, ...vals);
+  const start = new Date(points[0].t.replace(" ","T")).getTime();
+  const finish = new Date(points[points.length-1].t.replace(" ","T")).getTime();
+  const x = t => padL + ((new Date(t.replace(" ","T")).getTime()-start)/(finish-start))*(w-padL-padR);
+  const y = v => padT + (max-v)/(max-min)*(h-padT-padB);
+
+  ctx.strokeStyle = "rgba(180,220,255,.18)";
+  ctx.lineWidth = 1;
+  ctx.font = "15px Arial";
+  ctx.fillStyle = "#d9ecff";
+  [-4,-2,0,2,4].forEach(v=>{
+    const yy=y(v);
+    ctx.beginPath(); ctx.moveTo(padL,yy); ctx.lineTo(w-padR,yy); ctx.stroke();
+    ctx.fillText(`${v} ft`, 4, yy+5);
+  });
+
+  const gradient = ctx.createLinearGradient(0,padT,0,h-padB);
+  gradient.addColorStop(0,"rgba(60,170,255,.85)");
+  gradient.addColorStop(1,"rgba(0,100,190,.25)");
+
+  ctx.beginPath();
+  points.forEach((p,i)=>{
+    const xx=x(p.t), yy=y(parseFloat(p.v));
+    if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+  });
+  ctx.lineTo(x(points[points.length-1].t), h-padB);
+  ctx.lineTo(x(points[0].t), h-padB);
+  ctx.closePath();
+  ctx.fillStyle = gradient;
+  ctx.fill();
+
+  ctx.beginPath();
+  points.forEach((p,i)=>{
+    const xx=x(p.t), yy=y(parseFloat(p.v));
+    if(i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+  });
+  ctx.strokeStyle = "#43a8ff";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(220,240,255,.45)";
+  ctx.beginPath(); ctx.moveTo(padL,h-padB); ctx.lineTo(w-padR,h-padB); ctx.stroke();
+
+  ["12 AM","4 AM","8 AM","12 PM","4 PM","8 PM","12 AM"].forEach((lab,i)=>{
+    const xx = padL + i*(w-padL-padR)/6;
+    ctx.fillStyle = "#d9ecff";
+    ctx.fillText(lab, xx-18, h-8);
+  });
+
+  labels.forEach(t=>{
+    const xx=x(t.t), yy=y(parseFloat(t.v));
+    const high=t.type==="H";
+    ctx.fillStyle = high ? "#56e878" : "#49b7ff";
+    ctx.beginPath(); ctx.arc(xx,yy,5,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle = "#dff3ff"; ctx.lineWidth=2; ctx.stroke();
+
+    const text1 = timeLabel(t.t);
+    const text2 = `${parseFloat(t.v).toFixed(1)} ft`;
+    const boxW=74, boxH=42;
+    const bx=Math.min(Math.max(xx-boxW/2,padL),w-padR-boxW);
+    const by= high ? yy-58 : yy+12;
+    ctx.fillStyle = high ? "rgba(16,100,58,.82)" : "rgba(8,37,65,.88)";
+    ctx.strokeStyle = high ? "#45d06d" : "#3aa8ff";
+    ctx.lineWidth=1;
+    roundRect(ctx,bx,by,boxW,boxH,6,true,true);
+    ctx.fillStyle="#fff";
+    ctx.font="15px Arial";
+    ctx.fillText(text1,bx+8,by+17);
+    ctx.fillText(text2,bx+15,by+34);
+  });
+}
+function roundRect(ctx,x,y,w,h,r,fill,stroke){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+  if(fill)ctx.fill();
+  if(stroke)ctx.stroke();
+}
+
+async function refresh(){
+  try{
+    await loadWeather();
+    await loadTides();
+    document.getElementById("updated").textContent =
+      new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+  }catch(e){
+    document.getElementById("updated").textContent = "Update error";
+  }
+}
+refresh();
+setInterval(refresh,15*60*1000);
+setTimeout(()=>location.reload(),60*60*1000);
 </script>
 </body>
 </html>
