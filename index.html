@@ -496,19 +496,55 @@ function drawChart(points,labels){
   });
 
   // NOW line and current tide dot
-  if(nowTime >= start && nowTime <= finish){
-    let before=points[0];
-    let after=points[points.length-1];
+  const currentTime = new Date();
+const todayStart = new Date(currentTime);
+todayStart.setHours(0,0,0,0);
 
-    for(let i=0;i<points.length-1;i++){
-      const t1=new Date(points[i].t.replace(" ","T")).getTime();
-      const t2=new Date(points[i+1].t.replace(" ","T")).getTime();
+const currentMinutes =
+  currentTime.getHours() * 60 +
+  currentTime.getMinutes();
 
-      if(nowTime>=t1 && nowTime<=t2){
-        before=points[i];
-        after=points[i+1];
-        break;
-      }
+const nowX = L + (currentMinutes / 1440) * (w - L - R);
+
+// find closest tide point to current time
+let closest = points[0];
+let closestDiff = Infinity;
+
+points.forEach(p => {
+  const pt = new Date(p.t.replace(" ","T"));
+  const diff = Math.abs(pt.getTime() - currentTime.getTime());
+  if(diff < closestDiff){
+    closest = p;
+    closestDiff = diff;
+  }
+});
+
+const nowY = y(parseFloat(closest.v));
+
+// bright vertical line
+ctx.strokeStyle = "#ffff00";
+ctx.lineWidth = 4;
+ctx.setLineDash([]);
+
+ctx.beginPath();
+ctx.moveTo(nowX, T);
+ctx.lineTo(nowX, h - B);
+ctx.stroke();
+
+// bright dot
+ctx.fillStyle = "#ffff00";
+ctx.beginPath();
+ctx.arc(nowX, nowY, 11, 0, Math.PI * 2);
+ctx.fill();
+
+ctx.strokeStyle = "#000000";
+ctx.lineWidth = 3;
+ctx.stroke();
+
+// NOW label
+ctx.fillStyle = "#ffff00";
+ctx.font = "bold 20px Arial";
+ctx.fillText("NOW", Math.min(Math.max(nowX - 24, L), w - 70), T + 24);
     }
 
     const beforeTime=new Date(before.t.replace(" ","T")).getTime();
