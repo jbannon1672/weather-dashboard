@@ -465,6 +465,18 @@ function drawChart(points,labels){
   ctx.lineWidth=4;
   ctx.stroke();
 
+ const testX = w * 0.75;
+
+ctx.strokeStyle = "red";
+ctx.lineWidth = 10;
+ctx.beginPath();
+ctx.moveTo(testX, T);
+ctx.lineTo(testX, h - B);
+ctx.stroke();
+
+ctx.fillStyle = "red";
+ctx.font = "bold 28px Arial";
+ctx.fillText("NOW", testX - 35, T + 35);
   ["12A","4A","8A","12P","4P","8P","12A"].forEach((lab,i)=>{
     const xx=L+i*(w-L-R)/6;
     ctx.fillStyle="#dcecff";
