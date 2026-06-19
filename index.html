@@ -525,16 +525,7 @@ ctx.lineWidth=2;
 ctx.stroke();
 
 // Tide value label
-ctx.fillStyle="#ffea00";
-ctx.font="bold 18px Arial";
 
-const valueLabel = `${(+closest.v).toFixed(1)} ft`;
-
-ctx.fillText(
-  valueLabel,
-  Math.min(Math.max(nowX - 25, L), w - 70),
-  nowY - 15
-);
   }
 }
 
