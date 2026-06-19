@@ -8,53 +8,35 @@
 :root{--line:#2b5875;--blue:#35aaff;--orange:#ff9f2d;--green:#43d66b;--text:#f6fbff;--muted:#a9c3d8}
 *{box-sizing:border-box}
 body{margin:0;background:radial-gradient(circle at top,#143954,#07131f 55%,#03080d);color:var(--text);font-family:Arial,Helvetica,sans-serif;overflow:hidden}
-.screen{
-  width:100vw;
-  height:100vh;
-  padding:10px 22px;
-  display:grid;
-  grid-template-rows:82px 220px 1fr 44px;
-  gap:8px;
-}
-@keyframes drift{from{transform:translate(0,0)}to{transform:translate(8px,5px)}}
-.card,.footer{background:linear-gradient(145deg,rgba(20,55,82,.94),rgba(5,18,31,.96));border:1px solid rgba(83,165,220,.42);border-radius:18px;box-shadow:inset 0 0 30px rgba(0,0,0,.35);padding:16px;overflow:hidden}
-.header{display:grid;grid-template-columns:1.25fr .75fr;align-items:center}
-h1{margin:0;font-size:52px;line-height:.95}
-.sub{color:var(--muted);font-size:clamp(22px,1.55vw,34px);margin-top:10px}
-.clock{text-align:right;font-size:64px;font-weight:900;line-height:.95}
-.date{text-align:right;color:var(--muted);font-size:clamp(24px,1.8vw,38px);margin-top:10px}
-.top{
-  display:grid;
-  grid-template-columns:1.05fr 1.3fr .75fr;
-  gap:10px;
-}
-.bottom{display:grid;grid-template-columns:1.55fr .82fr;gap:clamp(12px,1vw,22px)}
-h2{margin:0 0 14px;color:var(--blue);text-transform:uppercase;font-size:clamp(25px,1.9vw,40px);letter-spacing:.04em}
-.current-main{display:grid;grid-template-columns:clamp(130px,10vw,210px) 1fr;align-items:center}
-.bigicon{font-size:78px;line-height:1;text-align:center}
-.condition{font-size:clamp(24px,2vw,42px);text-align:center;margin-top:10px}
-.temp{font-size:86px;font-weight:900;line-height:.85}
-.details{font-size:clamp(25px,2vw,42px);line-height:1.35}
-.highlow{display:flex;justify-content:space-around;border-top:1px solid var(--line);margin-top:clamp(14px,1vw,22px);padding-top:clamp(12px,1vw,20px);font-size:clamp(25px,1.9vw,40px)}
-.highlow .hi{color:var(--orange)}.highlow .lo{color:var(--blue)}
-.forecast{display:grid;grid-template-columns:repeat(4,1fr);height:calc(100% - 48px)}
+.screen{width:100vw;height:100vh;padding:10px 18px;display:grid;grid-template-rows:76px 195px 1fr;gap:8px}
+.card{background:linear-gradient(145deg,rgba(20,55,82,.94),rgba(5,18,31,.96));border:1px solid rgba(83,165,220,.42);border-radius:16px;box-shadow:inset 0 0 25px rgba(0,0,0,.35);padding:14px;overflow:hidden}
+.header{display:grid;grid-template-columns:1.3fr .7fr;align-items:center}
+h1{margin:0;font-size:46px;line-height:.95}
+.sub{color:var(--muted);font-size:23px;margin-top:4px}
+.clock{text-align:right;font-size:58px;font-weight:900;line-height:.9}
+.date{text-align:right;color:var(--muted);font-size:24px;margin-top:5px}
+.top{display:grid;grid-template-columns:1fr 1.1fr .72fr;gap:8px}
+.bottom{display:grid;grid-template-columns:1.7fr .72fr;gap:8px;min-height:0}
+h2{margin:0 0 8px;color:var(--blue);text-transform:uppercase;font-size:25px;letter-spacing:.03em}
+.current-main{display:grid;grid-template-columns:105px 1fr;align-items:center}
+.bigicon{font-size:72px;line-height:1;text-align:center}
+.condition{font-size:23px;text-align:center;margin-top:5px}
+.temp{font-size:82px;font-weight:900;line-height:.85}
+.details{font-size:25px;line-height:1.28}
+.forecast{display:grid;grid-template-columns:repeat(4,1fr);height:145px}
 .day{text-align:center;border-left:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}.day:first-child{border-left:0}
-.dayname{font-size:clamp(26px,2vw,42px);font-weight:800}.dayico{font-size:clamp(58px,5vw,105px);margin:.2em 0 .05em}
-.dayhi{color:var(--orange);font-size:clamp(45px,3.9vw,82px);font-weight:900;line-height:1}.daylo{color:var(--blue);font-size:clamp(35px,3vw,64px);font-weight:800;line-height:1}
-.rain{font-size:clamp(22px,1.55vw,34px);color:#d4efff;margin-top:.25em}
-.sunwind{font-size:clamp(26px,2.1vw,44px);line-height:1.35}.sunwind b{font-size:clamp(31px,2.5vw,52px)}
-.tide-top{display:flex;justify-content:space-between;font-size:clamp(24px,1.8vw,38px);margin-bottom:8px}.tide-top .green{color:var(--green)}.tide-top .blue{color:var(--blue)}
-#tideChart{width:100%;height:230px}
-.tide-item{display:grid;grid-template-columns:clamp(38px,3vw,64px) 1fr;border-top:1px solid var(--line);padding:clamp(14px,1.2vw,24px) 0;font-size:clamp(26px,2.1vw,44px)}
-.tide-item:first-child{border-top:0}.tide-type{font-size:clamp(22px,1.6vw,34px);text-transform:uppercase}.up{color:var(--green)}.down{color:var(--blue)}
-.footer{display:grid;grid-template-columns:1.3fr 1fr;align-items:center;padding:8px clamp(18px,1.25vw,30px);color:#d7e9f8;font-size:clamp(22px,1.5vw,34px)}.footer-right{text-align:right}
+.dayname{font-size:25px;font-weight:800}.dayico{font-size:46px;margin:0}.dayhi{color:var(--orange);font-size:42px;font-weight:900;line-height:.95}.daylo{color:var(--blue);font-size:32px;font-weight:800;line-height:.95}.rain{font-size:20px;color:#d4efff;margin-top:2px}
+.sunwind{font-size:26px;line-height:1.28}.sunwind b{font-size:30px}
+.tide-top{display:flex;justify-content:space-between;font-size:24px;margin-bottom:3px}.green{color:var(--green)}.blue{color:var(--blue)}
+#tideChart{width:100%;height:calc(100% - 48px)}
+.tide-item{display:grid;grid-template-columns:34px 1fr;border-top:1px solid var(--line);padding:10px 0;font-size:25px}.tide-item:first-child{border-top:0}.tide-type{font-size:21px;text-transform:uppercase}.up{color:var(--green)}.down{color:var(--blue)}
 </style>
 </head>
 <body>
 <div class="screen">
   <div class="header"><div><h1>Sea Isle City, NJ</h1><div class="sub">Weather · Forecast · Townsend Inlet Tides</div></div><div><div id="clock" class="clock">--:--</div><div id="date" class="date">Loading...</div></div></div>
   <div class="top">
-    <div class="card"><h2>Current</h2><div class="current-main"><div><div id="mainIcon" class="bigicon">🌤️</div><div id="condition" class="condition">Loading</div></div><div><div id="temp" class="temp">--°</div><div class="details">Feels <b id="feels">--°</b><br>Humidity <b id="humidity">--%</b><br>Wind <b id="windSmall">--</b></div></div></div><div class="highlow"><div class="hi">High <b id="todayHigh">--°</b></div><div class="lo">Low <b id="todayLow">--°</b></div></div></div>
+    <div class="card"><h2>Current</h2><div class="current-main"><div><div id="mainIcon" class="bigicon">🌤️</div><div id="condition" class="condition">Loading</div></div><div><div id="temp" class="temp">--°</div><div class="details">Feels <b id="feels">--°</b><br>Humidity <b id="humidity">--%</b><br>Wind <b id="windSmall">--</b></div></div></div></div>
     <div class="card"><h2>4-Day Forecast</h2><div id="forecast" class="forecast"></div></div>
     <div class="card"><h2>Sun & Wind</h2><div class="sunwind">🌬️ Wind<br><b id="windBig">--</b><br><br>☀️ Sunrise<br><b id="sunrise">--</b><br><br>🌅 Sunset<br><b id="sunset">--</b></div></div>
   </div>
@@ -62,7 +44,6 @@ h2{margin:0 0 14px;color:var(--blue);text-transform:uppercase;font-size:clamp(25
     <div class="card"><h2>Tide Chart</h2><div class="tide-top"><span id="nextHigh" class="green">Next High: --</span><span id="nextLow" class="blue">Next Low: --</span></div><canvas id="tideChart"></canvas></div>
     <div class="card"><h2>Next Tides</h2><div id="tideList">Loading...</div></div>
   </div>
-  <div class="footer"><div>⚓ Townsend Inlet tides · Weather updates over Wi-Fi</div><div class="footer-right">Updated: <span id="updated">--</span></div></div>
 </div>
 <script>
 const LAT=39.153,LON=-74.692,STATION="8535375";
@@ -74,7 +55,7 @@ function text(code){if(code===0)return"Clear";if(code<=2)return"Partly Cloudy";i
 async function loadWeather(){
  const url=`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America/New_York`;
  const d=await(await fetch(url)).json(),c=d.current,wd=windDir(c.wind_direction_10m);
- mainIcon.textContent=icon(c.weather_code);condition.textContent=text(c.weather_code);temp.textContent=`${Math.round(c.temperature_2m)}°`;feels.textContent=`${Math.round(c.apparent_temperature)}°`;humidity.textContent=`${c.relative_humidity_2m}%`;windSmall.textContent=`${Math.round(c.wind_speed_10m)} ${wd}`;windBig.textContent=`${Math.round(c.wind_speed_10m)} mph ${wd}`;todayHigh.textContent=`${Math.round(d.daily.temperature_2m_max[0])}°`;todayLow.textContent=`${Math.round(d.daily.temperature_2m_min[0])}°`;sunrise.textContent=new Date(d.daily.sunrise[0]).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});sunset.textContent=new Date(d.daily.sunset[0]).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+ mainIcon.textContent=icon(c.weather_code);condition.textContent=text(c.weather_code);temp.textContent=`${Math.round(c.temperature_2m)}°`;feels.textContent=`${Math.round(c.apparent_temperature)}°`;humidity.textContent=`${c.relative_humidity_2m}%`;windSmall.textContent=`${Math.round(c.wind_speed_10m)} ${wd}`;windBig.textContent=`${Math.round(c.wind_speed_10m)} mph ${wd}`;sunrise.textContent=new Date(d.daily.sunrise[0]).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});sunset.textContent=new Date(d.daily.sunset[0]).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
  let out="";for(let i=1;i<5;i++){const day=new Date(d.daily.time[i]).toLocaleDateString([],{weekday:"short"}).toUpperCase();out+=`<div class="day"><div class="dayname">${day}</div><div class="dayico">${icon(d.daily.weather_code[i])}</div><div class="dayhi">${Math.round(d.daily.temperature_2m_max[i])}°</div><div class="daylo">${Math.round(d.daily.temperature_2m_min[i])}°</div><div class="rain">💧 ${d.daily.precipitation_probability_max[i]??0}%</div></div>`}forecast.innerHTML=out;
 }
 function fmt(d){return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`}
@@ -89,19 +70,19 @@ async function loadTides(){
 }
 function drawChart(points,labels){
  const canvas=tideChart,r=canvas.getBoundingClientRect();canvas.width=r.width*devicePixelRatio;canvas.height=r.height*devicePixelRatio;const ctx=canvas.getContext("2d");ctx.scale(devicePixelRatio,devicePixelRatio);
- const w=r.width,h=r.height,L=Math.max(55,w*.035),R=18,T=16,B=42;ctx.clearRect(0,0,w,h);
- if(!points||points.length<2){ctx.fillStyle="#dcecff";ctx.font="28px Arial";ctx.fillText("Tide data unavailable",L,70);return}
+ const w=r.width,h=r.height,L=58,R=16,T=12,B=34;ctx.clearRect(0,0,w,h);
+ if(!points||points.length<2)return;
  const vals=points.map(p=>+p.v),min=Math.min(-4,...vals),max=Math.max(5,...vals),start=new Date(points[0].t.replace(" ","T")).getTime(),finish=new Date(points[points.length-1].t.replace(" ","T")).getTime();
  const x=t=>L+((new Date(t.replace(" ","T")).getTime()-start)/(finish-start))*(w-L-R),y=v=>T+(max-v)/(max-min)*(h-T-B);
- ctx.font=`${Math.max(18,w*.018)}px Arial`;ctx.strokeStyle="rgba(210,235,255,.18)";ctx.fillStyle="#dcecff";[-4,-2,0,2,4].forEach(v=>{const yy=y(v);ctx.beginPath();ctx.moveTo(L,yy);ctx.lineTo(w-R,yy);ctx.stroke();ctx.fillText(`${v}`,18,yy+6)});
+ ctx.font="20px Arial";ctx.strokeStyle="rgba(210,235,255,.18)";ctx.fillStyle="#dcecff";[-4,-2,0,2,4].forEach(v=>{const yy=y(v);ctx.beginPath();ctx.moveTo(L,yy);ctx.lineTo(w-R,yy);ctx.stroke();ctx.fillText(`${v}`,20,yy+7)});
  const grad=ctx.createLinearGradient(0,T,0,h-B);grad.addColorStop(0,"rgba(58,170,255,.95)");grad.addColorStop(1,"rgba(0,90,170,.35)");
  ctx.beginPath();points.forEach((p,i)=>{const xx=x(p.t),yy=y(+p.v);if(i===0)ctx.moveTo(xx,yy);else ctx.lineTo(xx,yy)});ctx.lineTo(x(points[points.length-1].t),h-B);ctx.lineTo(x(points[0].t),h-B);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
- ctx.beginPath();points.forEach((p,i)=>{const xx=x(p.t),yy=y(+p.v);if(i===0)ctx.moveTo(xx,yy);else ctx.lineTo(xx,yy)});ctx.strokeStyle="#4bb1ff";ctx.lineWidth=Math.max(5,w*.005);ctx.stroke();
- const axisFont=Math.max(18,w*.016);ctx.font=`${axisFont}px Arial`;["12A","4A","8A","12P","4P","8P","12A"].forEach((lab,i)=>{const xx=L+i*(w-L-R)/6;ctx.fillStyle="#dcecff";ctx.fillText(lab,xx-axisFont*.7,h-10)});
- labels.forEach(p=>{const xx=x(p.t),yy=y(+p.v),high=p.type==="H";ctx.fillStyle=high?"#50e375":"#44b9ff";ctx.beginPath();ctx.arc(xx,yy,Math.max(7,w*.006),0,Math.PI*2);ctx.fill();ctx.strokeStyle="white";ctx.lineWidth=2;ctx.stroke();ctx.font=`${Math.max(18,w*.017)}px Arial`;ctx.fillStyle="white";const tx=Math.min(Math.max(xx-40,L),w-110),ty=high?yy-44:yy+28;ctx.fillText(tOnly(p.t),tx,ty);ctx.fillText(`${(+p.v).toFixed(1)} ft`,tx,ty+Math.max(20,w*.018))});
- const now=new Date(),nowTime=now.getTime();if(nowTime>=start&&nowTime<=finish){let closest=points[0];points.forEach(p=>{const pt=new Date(p.t.replace(" ","T")).getTime(),ct=new Date(closest.t.replace(" ","T")).getTime();if(Math.abs(pt-nowTime)<Math.abs(ct-nowTime))closest=p});const nowX=L+((nowTime-start)/(finish-start))*(w-L-R),nowY=y(+closest.v);ctx.fillStyle="#ffea00";ctx.beginPath();ctx.arc(nowX,nowY,Math.max(10,w*.009),0,Math.PI*2);ctx.fill();ctx.strokeStyle="#fff";ctx.lineWidth=3;ctx.stroke()}
+ ctx.beginPath();points.forEach((p,i)=>{const xx=x(p.t),yy=y(+p.v);if(i===0)ctx.moveTo(xx,yy);else ctx.lineTo(xx,yy)});ctx.strokeStyle="#4bb1ff";ctx.lineWidth=5;ctx.stroke();
+ ctx.font="19px Arial";["12A","4A","8A","12P","4P","8P","12A"].forEach((lab,i)=>{const xx=L+i*(w-L-R)/6;ctx.fillStyle="#dcecff";ctx.fillText(lab,xx-16,h-8)});
+ labels.forEach(p=>{const xx=x(p.t),yy=y(+p.v),high=p.type==="H";ctx.fillStyle=high?"#50e375":"#44b9ff";ctx.beginPath();ctx.arc(xx,yy,8,0,Math.PI*2);ctx.fill();ctx.strokeStyle="white";ctx.lineWidth=2;ctx.stroke();ctx.font="20px Arial";ctx.fillStyle="white";const tx=Math.min(Math.max(xx-40,L),w-110),ty=high?yy-42:yy+28;ctx.fillText(tOnly(p.t),tx,ty);ctx.fillText(`${(+p.v).toFixed(1)} ft`,tx,ty+22)});
+ const now=new Date(),nowTime=now.getTime();if(nowTime>=start&&nowTime<=finish){let closest=points[0];points.forEach(p=>{const pt=new Date(p.t.replace(" ","T")).getTime(),ct=new Date(closest.t.replace(" ","T")).getTime();if(Math.abs(pt-nowTime)<Math.abs(ct-nowTime))closest=p});const nowX=L+((nowTime-start)/(finish-start))*(w-L-R),nowY=y(+closest.v);ctx.fillStyle="#ffea00";ctx.beginPath();ctx.arc(nowX,nowY,11,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#fff";ctx.lineWidth=3;ctx.stroke()}
 }
-async function refresh(){try{await loadWeather();await loadTides();updated.textContent=new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}catch(e){updated.textContent="error"}}
+async function refresh(){try{await loadWeather();await loadTides()}catch(e){}}
 refresh();setInterval(refresh,15*60*1000);setTimeout(()=>location.reload(),60*60*1000);
 </script>
 </body>
