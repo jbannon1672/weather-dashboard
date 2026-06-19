@@ -515,25 +515,26 @@ function drawChart(points,labels){
     const nowX=L+((nowTime-start)/(finish-start))*(w-L-R);
     const nowY=y(+closest.v);
 
-    ctx.strokeStyle="#ffea00";
-    ctx.lineWidth=4;
-    ctx.beginPath();
-    ctx.moveTo(nowX,T);
-    ctx.lineTo(nowX,h-B);
-    ctx.stroke();
+ctx.fillStyle="#ffea00";
+ctx.beginPath();
+ctx.arc(nowX,nowY,10,0,Math.PI*2);
+ctx.fill();
 
-    ctx.fillStyle="#ffea00";
-    ctx.beginPath();
-    ctx.arc(nowX,nowY,11,0,Math.PI*2);
-    ctx.fill();
+ctx.strokeStyle="#ffffff";
+ctx.lineWidth=2;
+ctx.stroke();
 
-    ctx.strokeStyle="#000";
-    ctx.lineWidth=3;
-    ctx.stroke();
+// Tide value label
+ctx.fillStyle="#ffea00";
+ctx.font="bold 18px Arial";
 
-    ctx.fillStyle="#ffea00";
-    ctx.font="bold 20px Arial";
-    ctx.fillText("NOW",Math.min(Math.max(nowX-24,L),w-70),T+24);
+const valueLabel = `${(+closest.v).toFixed(1)} ft`;
+
+ctx.fillText(
+  valueLabel,
+  Math.min(Math.max(nowX - 25, L), w - 70),
+  nowY - 15
+);
   }
 }
 
