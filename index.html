@@ -419,7 +419,6 @@ function drawChart(points,labels){
 
   const start=new Date(points[0].t.replace(" ","T")).getTime();
   const finish=new Date(points[points.length-1].t.replace(" ","T")).getTime();
-  const nowTime=Date.now();
 
   const x=t=>L+((new Date(t.replace(" ","T")).getTime()-start)/(finish-start))*(w-L-R);
   const y=v=>T+(max-v)/(max-min)*(h-T-B);
@@ -445,7 +444,7 @@ function drawChart(points,labels){
   points.forEach((p,i)=>{
     const xx=x(p.t);
     const yy=y(+p.v);
-    if(i===0) ctx.moveTo(xx,yy);
+    if(i===0)ctx.moveTo(xx,yy);
     else ctx.lineTo(xx,yy);
   });
   ctx.lineTo(x(points[points.length-1].t),h-B);
@@ -458,7 +457,7 @@ function drawChart(points,labels){
   points.forEach((p,i)=>{
     const xx=x(p.t);
     const yy=y(+p.v);
-    if(i===0) ctx.moveTo(xx,yy);
+    if(i===0)ctx.moveTo(xx,yy);
     else ctx.lineTo(xx,yy);
   });
   ctx.strokeStyle="#4bb1ff";
@@ -495,61 +494,43 @@ function drawChart(points,labels){
     ctx.fillText(`${(+p.v).toFixed(1)} ft`,tx,ty+18);
   });
 
-  // NOW line and current tide dot
-  if(nowTime >= start && nowTime <= finish){
-    let before=points[0];
-    let after=points[points.length-1];
+  // Current time marker
+  const now=new Date();
+  const nowTime=now.getTime();
 
-    for(let i=0;i<points.length-1;i++){
-      const t1=new Date(points[i].t.replace(" ","T")).getTime();
-      const t2=new Date(points[i+1].t.replace(" ","T")).getTime();
+  if(nowTime>=start && nowTime<=finish){
+    let closest=points[0];
 
-      if(nowTime>=t1 && nowTime<=t2){
-        before=points[i];
-        after=points[i+1];
-        break;
+    points.forEach(p=>{
+      const pt=new Date(p.t.replace(" ","T")).getTime();
+      const ct=new Date(closest.t.replace(" ","T")).getTime();
+      if(Math.abs(pt-nowTime)<Math.abs(ct-nowTime)){
+        closest=p;
       }
-    }
-
-    const beforeTime=new Date(before.t.replace(" ","T")).getTime();
-    const afterTime=new Date(after.t.replace(" ","T")).getTime();
-    const ratio=(nowTime-beforeTime)/(afterTime-beforeTime);
-
-    const beforeVal=parseFloat(before.v);
-    const afterVal=parseFloat(after.v);
-    const nowVal=beforeVal+(afterVal-beforeVal)*ratio;
+    });
 
     const nowX=L+((nowTime-start)/(finish-start))*(w-L-R);
-    const nowY=y(nowVal);
+    const nowY=y(+closest.v);
 
-    ctx.strokeStyle="rgba(255,255,255,.85)";
-    ctx.lineWidth=2;
-    ctx.setLineDash([6,6]);
-
+    ctx.strokeStyle="#ffea00";
+    ctx.lineWidth=4;
     ctx.beginPath();
     ctx.moveTo(nowX,T);
     ctx.lineTo(nowX,h-B);
     ctx.stroke();
 
-    ctx.setLineDash([]);
-
-    ctx.fillStyle="#ffd84d";
+    ctx.fillStyle="#ffea00";
     ctx.beginPath();
-    ctx.arc(nowX,nowY,8,0,Math.PI*2);
+    ctx.arc(nowX,nowY,11,0,Math.PI*2);
     ctx.fill();
 
-    ctx.strokeStyle="#ffffff";
+    ctx.strokeStyle="#000";
     ctx.lineWidth=3;
     ctx.stroke();
 
-    ctx.fillStyle="#ffffff";
-    ctx.font="bold 15px Arial";
-
-    const labelX=Math.min(Math.max(nowX-18,L),w-52);
-    ctx.fillText("NOW",labelX,T+18);
-
-    ctx.font="15px Arial";
-    ctx.fillText(`${nowVal.toFixed(1)} ft`,Math.min(Math.max(nowX-22,L),w-58),T+36);
+    ctx.fillStyle="#ffea00";
+    ctx.font="bold 20px Arial";
+    ctx.fillText("NOW",Math.min(Math.max(nowX-24,L),w-70),T+24);
   }
 }
 
