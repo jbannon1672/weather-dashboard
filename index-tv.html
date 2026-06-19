@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Sea Isle TV Weather</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{--line:#2b5875;--blue:#35aaff;--orange:#ff9f2d;--green:#43d66b;--text:#f6fbff;--muted:#a9c3d8}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top,#143954,#07131f 55%,#03080d);color:var(--text);font-family:Arial,Helvetica,sans-serif;overflow:hidden}
+.screen{width:100vw;height:100vh;padding:clamp(18px,1.5vw,34px);display:grid;grid-template-rows:clamp(100px,13vh,150px) clamp(250px,34vh,380px) 1fr clamp(52px,7vh,76px);gap:clamp(12px,1vw,22px);animation:drift 900s infinite alternate ease-in-out}
+@keyframes drift{from{transform:translate(0,0)}to{transform:translate(8px,5px)}}
+.card,.footer{background:linear-gradient(145deg,rgba(20,55,82,.94),rgba(5,18,31,.96));border:1px solid rgba(83,165,220,.42);border-radius:18px;box-shadow:inset 0 0 30px rgba(0,0,0,.35);padding:clamp(18px,1.25vw,30px);overflow:hidden}
+.header{display:grid;grid-template-columns:1.25fr .75fr;align-items:center}
+h1{margin:0;font-size:clamp(46px,4.5vw,92px);line-height:.95}
+.sub{color:var(--muted);font-size:clamp(22px,1.55vw,34px);margin-top:10px}
+.clock{text-align:right;font-size:clamp(58px,5.4vw,110px);font-weight:900;line-height:.95}
+.date{text-align:right;color:var(--muted);font-size:clamp(24px,1.8vw,38px);margin-top:10px}
+.top{display:grid;grid-template-columns:1.05fr 1.3fr .75fr;gap:clamp(12px,1vw,22px)}
+.bottom{display:grid;grid-template-columns:1.55fr .82fr;gap:clamp(12px,1vw,22px)}
+h2{margin:0 0 14px;color:var(--blue);text-transform:uppercase;font-size:clamp(25px,1.9vw,40px);letter-spacing:.04em}
+.current-main{display:grid;grid-template-columns:clamp(130px,10vw,210px) 1fr;align-items:center}
+.bigicon{font-size:clamp(82px,8vw,160px);line-height:1;text-align:center}
+.condition{font-size:clamp(24px,2vw,42px);text-align:center;margin-top:10px}
+.temp{font-size:clamp(92px,9vw,190px);font-weight:900;line-height:.85}
+.details{font-size:clamp(25px,2vw,42px);line-height:1.35}
+.highlow{display:flex;justify-content:space-around;border-top:1px solid var(--line);margin-top:clamp(14px,1vw,22px);padding-top:clamp(12px,1vw,20px);font-size:clamp(25px,1.9vw,40px)}
+.highlow .hi{color:var(--orange)}.highlow .lo{color:var(--blue)}
+.forecast{display:grid;grid-template-columns:repeat(4,1fr);height:calc(100% - 48px)}
+.day{text-align:center;border-left:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}.day:first-child{border-left:0}
+.dayname{font-size:clamp(26px,2vw,42px);font-weight:800}.dayico{font-size:clamp(58px,5vw,105px);margin:.2em 0 .05em}
+.dayhi{color:var(--orange);font-size:clamp(45px,3.9vw,82px);font-weight:900;line-height:1}.daylo{color:var(--blue);font-size:clamp(35px,3vw,64px);font-weight:800;line-height:1}
+.rain{font-size:clamp(22px,1.55vw,34px);color:#d4efff;margin-top:.25em}
+.sunwind{font-size:clamp(26px,2.1vw,44px);line-height:1.35}.sunwind b{font-size:clamp(31px,2.5vw,52px)}
+.tide-top{display:flex;justify-content:space-between;font-size:clamp(24px,1.8vw,38px);margin-bottom:8px}.tide-top .green{color:var(--green)}.tide-top .blue{color:var(--blue)}
+#tideChart{width:100%;height:calc(100% - 60px)}
+.tide-item{display:grid;grid-template-columns:clamp(38px,3vw,64px) 1fr;border-top:1px solid var(--line);padding:clamp(14px,1.2vw,24px) 0;font-size:clamp(26px,2.1vw,44px)}
+.tide-item:first-child{border-top:0}.tide-type{font-size:clamp(22px,1.6vw,34px);text-transform:uppercase}.up{color:var(--green)}.down{color:var(--blue)}
+.footer{display:grid;grid-template-columns:1.3fr 1fr;align-items:center;padding:8px clamp(18px,1.25vw,30px);color:#d7e9f8;font-size:clamp(22px,1.5vw,34px)}.footer-right{text-align:right}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="header"><div><h1>Sea Isle City, NJ</h1><div class="sub">Weather · Forecast · Townsend Inlet Tides</div></div><div><div id="clock" class="clock">--:--</div><div id="date" class="date">Loading...</div></div></div>
+  <div class="top">
+    <div class="card"><h2>Current</h2><div class="current-main"><div><div id="mainIcon" class="bigicon">🌤️</div><div id="condition" class="condition">Loading</div></div><div><div id="temp" class="temp">--°</div><div class="details">Feels <b id="feels">--°</b><br>Humidity <b id="humidity">--%</b><br>Wind <b id="windSmall">--</b></div></div></div><div class="highlow"><div class="hi">High <b id="todayHigh">--°</b></div><div class="lo">Low <b id="todayLow">--°</b></div></div></div>
+    <div class="card"><h2>4-Day Forecast</h2><div id="forecast" class="forecast"></div></div>
+    <div class="card"><h2>Sun & Wind</h2><div class="sunwind">🌬️ Wind<br><b id="windBig">--</b><br><br>☀️ Sunrise<br><b id="sunrise">--</b><br><br>🌅 Sunset<br><b id="sunset">--</b></div></div>
+  </div>
+  <div class="bottom">
+    <div class="card"><h2>Tide Chart</h2><div class="tide-top"><span id="nextHigh" class="green">Next High: --</span><span id="nextLow" class="blue">Next Low: --</span></div><canvas id="tideChart"></canvas></div>
+    <div class="card"><h2>Next Tides</h2><div id="tideList">Loading...</div></div>
+  </div>
+  <div class="footer"><div>⚓ Townsend Inlet tides · Weather updates over Wi-Fi</div><div class="footer-right">Updated: <span id="updated">--</span></div></div>
+</div>
+<script>
+const LAT=39.153,LON=-74.692,STATION="8535375";
+function updateClock(){const now=new Date();clock.textContent=now.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});date.textContent=now.toLocaleDateString([],{weekday:"long",month:"long",day:"numeric"})}
+setInterval(updateClock,1000);updateClock();
+function windDir(deg){return["N","NE","E","SE","S","SW","W","NW"][Math.round(deg/45)%8]}
+function icon(code){if(code===0)return"☀️";if(code<=2)return"🌤️";if(code===3)return"☁️";if([45,48].includes(code))return"🌫️";if([51,53,55,61,63,65,80,81,82].includes(code))return"🌧️";if([95,96,99].includes(code))return"⛈️";return"🌤️"}
+function text(code){if(code===0)return"Clear";if(code<=2)return"Partly Cloudy";if(code===3)return"Cloudy";if([51,53,55,61,63,65,80,81,82].includes(code))return"Rain";if([95,96,99].includes(code))return"Storms";return"Cloudy"}
+async function loadWeather(){
+ const url=`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America/New_York`;
+ const d=await(await fetch(url)).json(),c=d.current,wd=windDir(c.wind_direction_10m);
+ mainIcon.textContent=icon(c.weather_code);condition.textContent=text(c.weather_code);temp.textContent=`${Math.round(c.temperature_2m)}°`;feels.textContent=`${Math.round(c.apparent_temperature)}°`;humidity.textContent=`${c.relative_humidity_2m}%`;windSmall.textContent=`${Math.round(c.wind_speed_10m)} ${wd}`;windBig.textContent=`${Math.round(c.wind_speed_10m)} mph ${wd}`;todayHigh.textContent=`${Math.round(d.daily.temperature_2m_max[0])}°`;todayLow.textContent=`${Math.round(d.daily.temperature_2m_min[0])}°`;sunrise.textContent=new Date(d.daily.sunrise[0]).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});sunset.textContent=new Date(d.daily.sunset[0]).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+ let out="";for(let i=1;i<5;i++){const day=new Date(d.daily.time[i]).toLocaleDateString([],{weekday:"short"}).toUpperCase();out+=`<div class="day"><div class="dayname">${day}</div><div class="dayico">${icon(d.daily.weather_code[i])}</div><div class="dayhi">${Math.round(d.daily.temperature_2m_max[i])}°</div><div class="daylo">${Math.round(d.daily.temperature_2m_min[i])}°</div><div class="rain">💧 ${d.daily.precipitation_probability_max[i]??0}%</div></div>`}forecast.innerHTML=out;
+}
+function fmt(d){return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`}
+function tOnly(s){return new Date(s.replace(" ","T")).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}
+function dTime(s){return new Date(s.replace(" ","T")).toLocaleString([],{weekday:"short",hour:"numeric",minute:"2-digit"})}
+async function loadTides(){
+ const now=new Date(),end=new Date();end.setDate(now.getDate()+1);
+ const base=`https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=dashboard&begin_date=${fmt(now)}&end_date=${fmt(end)}&datum=MLLW&station=${STATION}&time_zone=lst_ldt&units=english&format=json`;
+ const hilo=(await(await fetch(base+"&interval=hilo")).json()).predictions||[],hourly=(await(await fetch(base)).json()).predictions||[],next=hilo.slice(0,4);
+ tideList.innerHTML=next.map(x=>{const high=x.type==="H";return`<div class="tide-item"><div class="${high?'up':'down'}">${high?'↑':'↓'}</div><div><b>${dTime(x.t)}</b><br><span class="tide-type ${high?'up':'down'}">${high?'High Tide':'Low Tide'}</span><b style="float:right">${parseFloat(x.v).toFixed(1)} ft</b></div></div>`}).join("");
+ const nh=hilo.find(x=>x.type==="H"),nl=hilo.find(x=>x.type==="L");nextHigh.textContent=nh?`Next High: ${tOnly(nh.t)} (${parseFloat(nh.v).toFixed(1)} ft)`:"Next High: --";nextLow.textContent=nl?`Next Low: ${tOnly(nl.t)} (${parseFloat(nl.v).toFixed(1)} ft)`:"Next Low: --";drawChart(hourly,next);
+}
+function drawChart(points,labels){
+ const canvas=tideChart,r=canvas.getBoundingClientRect();canvas.width=r.width*devicePixelRatio;canvas.height=r.height*devicePixelRatio;const ctx=canvas.getContext("2d");ctx.scale(devicePixelRatio,devicePixelRatio);
+ const w=r.width,h=r.height,L=Math.max(55,w*.035),R=18,T=16,B=42;ctx.clearRect(0,0,w,h);
+ if(!points||points.length<2){ctx.fillStyle="#dcecff";ctx.font="28px Arial";ctx.fillText("Tide data unavailable",L,70);return}
+ const vals=points.map(p=>+p.v),min=Math.min(-4,...vals),max=Math.max(5,...vals),start=new Date(points[0].t.replace(" ","T")).getTime(),finish=new Date(points[points.length-1].t.replace(" ","T")).getTime();
+ const x=t=>L+((new Date(t.replace(" ","T")).getTime()-start)/(finish-start))*(w-L-R),y=v=>T+(max-v)/(max-min)*(h-T-B);
+ ctx.font=`${Math.max(18,w*.018)}px Arial`;ctx.strokeStyle="rgba(210,235,255,.18)";ctx.fillStyle="#dcecff";[-4,-2,0,2,4].forEach(v=>{const yy=y(v);ctx.beginPath();ctx.moveTo(L,yy);ctx.lineTo(w-R,yy);ctx.stroke();ctx.fillText(`${v}`,18,yy+6)});
+ const grad=ctx.createLinearGradient(0,T,0,h-B);grad.addColorStop(0,"rgba(58,170,255,.95)");grad.addColorStop(1,"rgba(0,90,170,.35)");
+ ctx.beginPath();points.forEach((p,i)=>{const xx=x(p.t),yy=y(+p.v);if(i===0)ctx.moveTo(xx,yy);else ctx.lineTo(xx,yy)});ctx.lineTo(x(points[points.length-1].t),h-B);ctx.lineTo(x(points[0].t),h-B);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+ ctx.beginPath();points.forEach((p,i)=>{const xx=x(p.t),yy=y(+p.v);if(i===0)ctx.moveTo(xx,yy);else ctx.lineTo(xx,yy)});ctx.strokeStyle="#4bb1ff";ctx.lineWidth=Math.max(5,w*.005);ctx.stroke();
+ const axisFont=Math.max(18,w*.016);ctx.font=`${axisFont}px Arial`;["12A","4A","8A","12P","4P","8P","12A"].forEach((lab,i)=>{const xx=L+i*(w-L-R)/6;ctx.fillStyle="#dcecff";ctx.fillText(lab,xx-axisFont*.7,h-10)});
+ labels.forEach(p=>{const xx=x(p.t),yy=y(+p.v),high=p.type==="H";ctx.fillStyle=high?"#50e375":"#44b9ff";ctx.beginPath();ctx.arc(xx,yy,Math.max(7,w*.006),0,Math.PI*2);ctx.fill();ctx.strokeStyle="white";ctx.lineWidth=2;ctx.stroke();ctx.font=`${Math.max(18,w*.017)}px Arial`;ctx.fillStyle="white";const tx=Math.min(Math.max(xx-40,L),w-110),ty=high?yy-44:yy+28;ctx.fillText(tOnly(p.t),tx,ty);ctx.fillText(`${(+p.v).toFixed(1)} ft`,tx,ty+Math.max(20,w*.018))});
+ const now=new Date(),nowTime=now.getTime();if(nowTime>=start&&nowTime<=finish){let closest=points[0];points.forEach(p=>{const pt=new Date(p.t.replace(" ","T")).getTime(),ct=new Date(closest.t.replace(" ","T")).getTime();if(Math.abs(pt-nowTime)<Math.abs(ct-nowTime))closest=p});const nowX=L+((nowTime-start)/(finish-start))*(w-L-R),nowY=y(+closest.v);ctx.fillStyle="#ffea00";ctx.beginPath();ctx.arc(nowX,nowY,Math.max(10,w*.009),0,Math.PI*2);ctx.fill();ctx.strokeStyle="#fff";ctx.lineWidth=3;ctx.stroke()}
+}
+async function refresh(){try{await loadWeather();await loadTides();updated.textContent=new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}catch(e){updated.textContent="error"}}
+refresh();setInterval(refresh,15*60*1000);setTimeout(()=>location.reload(),60*60*1000);
+</script>
+</body>
+</html>
