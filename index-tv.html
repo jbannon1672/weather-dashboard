@@ -8,28 +8,28 @@
 :root{--line:#2b5875;--blue:#35aaff;--orange:#ff9f2d;--green:#43d66b;--text:#f6fbff;--muted:#a9c3d8}
 *{box-sizing:border-box}
 body{margin:0;background:radial-gradient(circle at top,#143954,#07131f 55%,#03080d);color:var(--text);font-family:Arial,Helvetica,sans-serif;overflow:hidden}
-.screen{width:100vw;height:100vh;padding:10px 18px;display:grid;grid-template-rows:76px 195px 1fr;gap:8px}
-.card{background:linear-gradient(145deg,rgba(20,55,82,.94),rgba(5,18,31,.96));border:1px solid rgba(83,165,220,.42);border-radius:16px;box-shadow:inset 0 0 25px rgba(0,0,0,.35);padding:14px;overflow:hidden}
+.screen{width:100vw;height:100vh;padding:8px 18px;display:grid;grid-template-rows:68px 175px 1fr;gap:8px}
+.card{background:linear-gradient(145deg,rgba(20,55,82,.94),rgba(5,18,31,.96));border:1px solid rgba(83,165,220,.42);border-radius:16px;box-shadow:inset 0 0 25px rgba(0,0,0,.35);padding:12px;overflow:hidden}
 .header{display:grid;grid-template-columns:1.3fr .7fr;align-items:center}
-h1{margin:0;font-size:46px;line-height:.95}
-.sub{color:var(--muted);font-size:23px;margin-top:4px}
-.clock{text-align:right;font-size:58px;font-weight:900;line-height:.9}
-.date{text-align:right;color:var(--muted);font-size:24px;margin-top:5px}
-.top{display:grid;grid-template-columns:1fr 1.1fr .72fr;gap:8px}
+h1{margin:0;font-size:42px;line-height:.9}
+.sub{color:var(--muted);font-size:22px;margin-top:3px}
+.clock{text-align:right;font-size:52px;font-weight:900;line-height:.85}
+.date{text-align:right;color:var(--muted);font-size:22px;margin-top:4px}
+.top{display:grid;grid-template-columns:1fr 1.1fr .72fr;gap:8px;min-height:0}
 .bottom{display:grid;grid-template-columns:1.7fr .72fr;gap:8px;min-height:0}
-h2{margin:0 0 8px;color:var(--blue);text-transform:uppercase;font-size:25px;letter-spacing:.03em}
-.current-main{display:grid;grid-template-columns:105px 1fr;align-items:center}
-.bigicon{font-size:72px;line-height:1;text-align:center}
-.condition{font-size:23px;text-align:center;margin-top:5px}
-.temp{font-size:82px;font-weight:900;line-height:.85}
-.details{font-size:25px;line-height:1.28}
-.forecast{display:grid;grid-template-columns:repeat(4,1fr);height:145px}
+h2{margin:0 0 6px;color:var(--blue);text-transform:uppercase;font-size:24px;letter-spacing:.03em}
+.current-main{display:grid;grid-template-columns:100px 1fr;align-items:center}
+.bigicon{font-size:66px;line-height:1;text-align:center}
+.condition{font-size:21px;text-align:center;margin-top:2px}
+.temp{font-size:74px;font-weight:900;line-height:.82}
+.details{font-size:23px;line-height:1.18}
+.forecast{display:grid;grid-template-columns:repeat(4,1fr);height:128px}
 .day{text-align:center;border-left:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}.day:first-child{border-left:0}
-.dayname{font-size:25px;font-weight:800}.dayico{font-size:46px;margin:0}.dayhi{color:var(--orange);font-size:42px;font-weight:900;line-height:.95}.daylo{color:var(--blue);font-size:32px;font-weight:800;line-height:.95}.rain{font-size:20px;color:#d4efff;margin-top:2px}
-.sunwind{font-size:26px;line-height:1.28}.sunwind b{font-size:30px}
-.tide-top{display:flex;justify-content:space-between;font-size:24px;margin-bottom:3px}.green{color:var(--green)}.blue{color:var(--blue)}
-#tideChart{width:100%;height:calc(100% - 48px)}
-.tide-item{display:grid;grid-template-columns:34px 1fr;border-top:1px solid var(--line);padding:10px 0;font-size:25px}.tide-item:first-child{border-top:0}.tide-type{font-size:21px;text-transform:uppercase}.up{color:var(--green)}.down{color:var(--blue)}
+.dayname{font-size:24px;font-weight:800}.dayico{font-size:43px;margin:0}.dayhi{color:var(--orange);font-size:39px;font-weight:900;line-height:.95}.daylo{color:var(--blue);font-size:31px;font-weight:800;line-height:.95}
+.sunwind{font-size:24px;line-height:1.18}.sunwind b{font-size:28px}
+.tide-top{display:flex;justify-content:space-between;font-size:23px;margin-bottom:2px;gap:12px}.green{color:var(--green)}.blue{color:var(--blue)}
+#tideChart{width:100%;height:calc(100% - 44px)}
+.tide-item{display:grid;grid-template-columns:32px 1fr;border-top:1px solid var(--line);padding:12px 0;font-size:24px}.tide-item:first-child{border-top:0}.tide-type{font-size:20px;text-transform:uppercase}.up{color:var(--green)}.down{color:var(--blue)}
 </style>
 </head>
 <body>
@@ -56,7 +56,7 @@ async function loadWeather(){
  const url=`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America/New_York`;
  const d=await(await fetch(url)).json(),c=d.current,wd=windDir(c.wind_direction_10m);
  mainIcon.textContent=icon(c.weather_code);condition.textContent=text(c.weather_code);temp.textContent=`${Math.round(c.temperature_2m)}°`;feels.textContent=`${Math.round(c.apparent_temperature)}°`;humidity.textContent=`${c.relative_humidity_2m}%`;windSmall.textContent=`${Math.round(c.wind_speed_10m)} ${wd}`;windBig.textContent=`${Math.round(c.wind_speed_10m)} mph ${wd}`;sunrise.textContent=new Date(d.daily.sunrise[0]).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});sunset.textContent=new Date(d.daily.sunset[0]).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
- let out="";for(let i=1;i<5;i++){const day=new Date(d.daily.time[i]).toLocaleDateString([],{weekday:"short"}).toUpperCase();out+=`<div class="day"><div class="dayname">${day}</div><div class="dayico">${icon(d.daily.weather_code[i])}</div><div class="dayhi">${Math.round(d.daily.temperature_2m_max[i])}°</div><div class="daylo">${Math.round(d.daily.temperature_2m_min[i])}°</div><div class="rain">💧 ${d.daily.precipitation_probability_max[i]??0}%</div></div>`}forecast.innerHTML=out;
+ let out="";for(let i=1;i<5;i++){const day=new Date(d.daily.time[i]).toLocaleDateString([],{weekday:"short"}).toUpperCase();out+=`<div class="day"><div class="dayname">${day}</div><div class="dayico">${icon(d.daily.weather_code[i])}</div><div class="dayhi">${Math.round(d.daily.temperature_2m_max[i])}°</div><div class="daylo">${Math.round(d.daily.temperature_2m_min[i])}°</div></div>`}forecast.innerHTML=out;
 }
 function fmt(d){return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`}
 function tOnly(s){return new Date(s.replace(" ","T")).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}
@@ -64,9 +64,9 @@ function dTime(s){return new Date(s.replace(" ","T")).toLocaleString([],{weekday
 async function loadTides(){
  const now=new Date(),end=new Date();end.setDate(now.getDate()+1);
  const base=`https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=dashboard&begin_date=${fmt(now)}&end_date=${fmt(end)}&datum=MLLW&station=${STATION}&time_zone=lst_ldt&units=english&format=json`;
- const hilo=(await(await fetch(base+"&interval=hilo")).json()).predictions||[],hourly=(await(await fetch(base)).json()).predictions||[],next=hilo.slice(0,4);
+ const hilo=(await(await fetch(base+"&interval=hilo")).json()).predictions||[],hourly=(await(await fetch(base)).json()).predictions||[],next=hilo.slice(0,3);
  tideList.innerHTML=next.map(x=>{const high=x.type==="H";return`<div class="tide-item"><div class="${high?'up':'down'}">${high?'↑':'↓'}</div><div><b>${dTime(x.t)}</b><br><span class="tide-type ${high?'up':'down'}">${high?'High Tide':'Low Tide'}</span><b style="float:right">${parseFloat(x.v).toFixed(1)} ft</b></div></div>`}).join("");
- const nh=hilo.find(x=>x.type==="H"),nl=hilo.find(x=>x.type==="L");nextHigh.textContent=nh?`Next High: ${tOnly(nh.t)} (${parseFloat(nh.v).toFixed(1)} ft)`:"Next High: --";nextLow.textContent=nl?`Next Low: ${tOnly(nl.t)} (${parseFloat(nl.v).toFixed(1)} ft)`:"Next Low: --";drawChart(hourly,next);
+ const nh=hilo.find(x=>x.type==="H"),nl=hilo.find(x=>x.type==="L");nextHigh.textContent=nh?`Next High: ${tOnly(nh.t)} (${parseFloat(nh.v).toFixed(1)} ft)`:"Next High: --";nextLow.textContent=nl?`Next Low: ${tOnly(nl.t)} (${parseFloat(nl.v).toFixed(1)} ft)`:"Next Low: --";drawChart(hourly,hilo.slice(0,4));
 }
 function drawChart(points,labels){
  const canvas=tideChart,r=canvas.getBoundingClientRect();canvas.width=r.width*devicePixelRatio;canvas.height=r.height*devicePixelRatio;const ctx=canvas.getContext("2d");ctx.scale(devicePixelRatio,devicePixelRatio);
